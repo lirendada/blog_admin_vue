@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const loginRequest = (loginForm) => {
+const loginApi = (loginForm) => {
     // 注意要return，不然外部拿到的是undefined
     return request({
         method: 'post',
@@ -9,4 +9,4 @@ const loginRequest = (loginForm) => {
     });
 }
 
-export default loginRequest
+export default loginApi

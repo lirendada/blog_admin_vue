@@ -1,7 +1,11 @@
 <script setup>
     import { ElMessage } from 'element-plus';
     import { reactive, ref } from 'vue';
-    import loginRequest from '@/api/user'
+    import { useUserStore } from '@/stores/userStore';
+    import { useRouter } from 'vue-router'
+
+    const userStore = useUserStore()
+    const router = useRouter()
 
     const loginForm = reactive({
         username: 'admin',
@@ -25,10 +29,14 @@
                 return ElMessage.error('请进行合法输入！')
             }
             
-            // 进行网络登录请求
-            const resp = await loginRequest(loginForm)
-            console.log(resp);
-            
+            try {
+                // 进行网络登录请求
+                await userStore.loginRequest(loginForm)
+                ElMessage.success('登录成功！')
+                router.push('/')
+            } catch (e) {
+                ElMessage.error(e)
+            }
         })
     }
 
@@ -117,7 +125,8 @@
             }
 
             .el-input {
-                height: 35px;
+                height: 40px;
+                font-size: 16px;
             }
 
             .el-form-item:last-child {
