@@ -8,8 +8,8 @@
     const router = useRouter()
 
     const loginForm = reactive({
-        username: 'admin',
-        password: 'admin'
+        username: '',
+        password: ''
     })
 
     const rules = {
@@ -31,6 +31,7 @@
             
             try {
                 // 进行网络登录请求
+                // 注意这里必须加 await，因为返回的是promise，需要让程序停在这里而不是直接往下面执行
                 await userStore.loginRequest(loginForm)
                 ElMessage.success('登录成功！')
                 router.push('/')
