@@ -2,10 +2,11 @@
     import { ElMessage } from 'element-plus';
     import { reactive, ref } from 'vue';
     import { useUserStore } from '@/stores/userStore';
-    import { useRouter } from 'vue-router'
+    import { useRouter, useRoute } from 'vue-router'
 
     const userStore = useUserStore()
     const router = useRouter()
+    const route = useRoute()
 
     const loginForm = reactive({
         username: '',
@@ -34,9 +35,10 @@
                 // 注意这里必须加 await，因为返回的是promise，需要让程序停在这里而不是直接往下面执行
                 await userStore.loginRequest(loginForm)
                 ElMessage.success('登录成功！')
-                router.push('/')
+
+                router.push(route.query.redirectUrl || '/') // 登录后跳回原先地址，若不存在则跳回首页
             } catch (e) {
-                ElMessage.error(e)
+                ElMessage.error(e.message || e)
             }
         })
     }

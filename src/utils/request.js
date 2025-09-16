@@ -24,11 +24,13 @@ instance.interceptors.response.use(
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
         console.log(response);
+        const { data:resp } = response
+        const { code, data, message } = resp        
         
-        if(response.data.code === 10000) {
-            return response.data.data
+        if(code === 10000) {
+            return data
         }
-        return Promise.reject(new Error(response.data.data.message))
+        return Promise.reject(message)
     }, 
     (error) => {
         // 超出 2xx 范围的状态码都会触发该函数。
