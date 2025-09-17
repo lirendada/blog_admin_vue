@@ -1,5 +1,6 @@
 /* 封装axios用于发送请求 */
 import axios from 'axios'
+import { getToken } from './token';
 
 const instance = axios.create({
     baseURL: 'http://localhost:4000/api',
@@ -9,7 +10,11 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
     (config) => {
-        // 在发送请求之前做些什么
+        // console.log(config);
+        const token = getToken()
+        if(token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
         return config;
     },  
     (error) => {
@@ -23,7 +28,7 @@ instance.interceptors.response.use(
     (response) => {
         // 2xx 范围内的状态码都会触发该函数。
         // 对响应数据做点什么
-        console.log(response);
+        // console.log(response);
         const { data:resp } = response
         const { code, data, message } = resp        
         

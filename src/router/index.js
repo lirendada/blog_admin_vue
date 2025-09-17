@@ -29,6 +29,7 @@ const router = createRouter({
 
 const whiteList = [ '/login' ]
 
+// 登录验证
 router.beforeEach((to, from) => {
   // 先获取token
   const userStore = useUserStore()

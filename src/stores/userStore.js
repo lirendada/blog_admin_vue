@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { loginApi } from '@/api/user.js'
+import { loginApi, userApi } from '@/api/user.js'
 import { setToken, getToken } from '@/utils/token.js'
 
 export const useUserStore = defineStore('user', () => {
     const user_token = ref(getToken() || '')
+
+    const user_info = ref({})
 
     const setToken__ = (token) => {
         // 保存pinia以及本地的token
@@ -22,9 +24,15 @@ export const useUserStore = defineStore('user', () => {
         loginForm.password = ''
     }
 
+    const userRequest = async () => {
+        const resp = await userApi() // 获取用户信息
+        user_info.value = resp
+    }
+
     return {
         user_token,
-        setToken,
-        loginRequest
+        user_info,
+        loginRequest,
+        userRequest
     }
 })
