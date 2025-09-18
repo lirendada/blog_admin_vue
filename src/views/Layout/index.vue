@@ -1,7 +1,20 @@
 <script setup>
     import { useUserStore } from '@/stores/userStore';
+    import { useRouter } from 'vue-router'
+    import { nextTick } from 'vue';
+import { ElMessage } from 'element-plus';
+
+    const router = useRouter()
     const userStore = useUserStore()
     userStore.userRequest()
+
+    const onQuit = async () => {
+        await userStore.clearRequest()
+        nextTick(() => {
+            router.push('/login')
+        })
+        ElMessage.success('退出成功！')
+    }
 </script>
 
 <template>
@@ -34,7 +47,13 @@
                         />
                         <el-text class="mx-1" size="large">{{ userStore.user_info.name || userStore.user_info.username }}</el-text>
                     </div>
-                    <el-icon :size="20"><SwitchButton/></el-icon>
+                    <el-icon :size="20">
+                        <el-popconfirm title="Are you sure to delete this?" @confirm="onQuit" >
+                            <template #reference>
+                            <SwitchButton />
+                            </template>
+                        </el-popconfirm>
+                    </el-icon>
                 </el-header>
                 <el-main>
                     <router-view></router-view>

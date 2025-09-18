@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { loginApi, userApi } from '@/api/user.js'
-import { setToken, getToken } from '@/utils/token.js'
+import { setToken, getToken, delToken } from '@/utils/token.js'
+
 
 export const useUserStore = defineStore('user', () => {
     const user_token = ref(getToken() || '')
@@ -29,10 +30,16 @@ export const useUserStore = defineStore('user', () => {
         user_info.value = resp
     }
 
+    const clearRequest = () => {
+        user_token.value = ''
+        delToken()
+    }
+
     return {
         user_token,
         user_info,
         loginRequest,
-        userRequest
+        userRequest,
+        clearRequest
     }
 })
