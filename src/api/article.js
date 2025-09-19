@@ -4,7 +4,15 @@ import request from '@/utils/request'
 export const articleApi = (query) => {
     return request({
         method: 'get',
-        'url': '/article',
+        url: '/article',
         params: query
+    })
+}
+
+// 删除文章
+export const delArticleApi = (id) => {
+    return request({
+        method: 'delete',
+        url: `/article/${id}`
     })
 }
