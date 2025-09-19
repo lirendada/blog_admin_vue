@@ -34,8 +34,6 @@ router.beforeEach((to, from) => {
   // 先获取token
   const userStore = useUserStore()
   const { user_token } = userStore
-  // console.log(user_token);
-  
 
   if(user_token) {
     // 如果存在token，则说明已经登录

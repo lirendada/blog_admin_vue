@@ -2,10 +2,10 @@
     import { ElMessage } from 'element-plus';
     import { reactive, ref } from 'vue';
     import { useUserStore } from '@/stores/userStore';
-    import { useRouter, useRoute } from 'vue-router'
+    import { useRoute } from 'vue-router'
+    import router from '@/router'
 
     const userStore = useUserStore()
-    const router = useRouter()
     const route = useRoute()
 
     const loginForm = reactive({
@@ -85,7 +85,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onLogin">登 录</el-button>
-                <el-button @click="onCancel">取 消</el-button>
+                <el-button @click="onCancel">重 置</el-button>
             </el-form-item>
         </el-form>
     </el-card>

@@ -17,15 +17,3 @@ export const userApi = () => {
         'url': '/profile'
     });
 }
-
-// 获取文章信息
-export const articleApi = (current, pageSize) => {
-    return request({
-        method: 'get',
-        'url': '/article',
-        params: {
-            current: current,
-            pageSize: pageSize
-        }
-    })
-}

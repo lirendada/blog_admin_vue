@@ -1,10 +1,9 @@
 <script setup>
     import { useUserStore } from '@/stores/userStore';
-    import { useRouter } from 'vue-router'
+    import router from '@/router'
     import { nextTick } from 'vue';
-import { ElMessage } from 'element-plus';
+    import { ElMessage } from 'element-plus';
 
-    const router = useRouter()
     const userStore = useUserStore()
     userStore.userRequest()
 

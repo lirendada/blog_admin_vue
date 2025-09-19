@@ -26,8 +26,10 @@ export const useUserStore = defineStore('user', () => {
     }
 
     const userRequest = async () => {
-        const resp = await userApi() // 获取用户信息
-        user_info.value = resp
+        try {
+            const resp = await userApi() // 获取用户信息
+            user_info.value = resp
+        } catch(e) {}
     }
 
     const clearRequest = () => {
