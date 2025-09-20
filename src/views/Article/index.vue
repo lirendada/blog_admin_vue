@@ -1,6 +1,6 @@
 <script setup>
     import { computed, onMounted, reactive, ref } from 'vue'
-    import { articleApi, delArticleApi, addArticleApi } from '@/api/article'
+    import { articleApi, delArticleApi, articleDetailApi } from '@/api/article'
     import { ElMessage, ElMessageBox } from 'element-plus'
     import articleOps from './components/articleOps.vue'
     import { ARTICLE_OPS_TYPE } from '@/constant/articleConstant'
@@ -64,10 +64,10 @@
     }
 
     // 打开抽屉
-    const openDrawer = (type, id) => {
+    const openDrawer = async (type, id) => {
         currentOps.value = type
-        drawer.value = true
         articleId.value = id
+        drawer.value = true
     }
 
     // 关闭抽屉

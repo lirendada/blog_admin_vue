@@ -33,3 +33,12 @@ export const addArticleApi = (articleForm) => {
         data: articleForm
     })
 }
+
+// 修改文章
+export const editArticalApi = (articleForm) => {
+    return request({
+        method: 'put',
+        url: `/article/${articleForm.id}`,
+        data: articleForm
+    })
+}
