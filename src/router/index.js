@@ -31,7 +31,7 @@ const whiteList = [ '/login' ]
 
 // 登录验证
 router.beforeEach((to, from) => {
-  // 先获取token
+  // 先从pinia中获取token
   const userStore = useUserStore()
   const { user_token } = userStore
 

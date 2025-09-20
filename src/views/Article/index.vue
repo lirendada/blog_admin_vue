@@ -8,7 +8,7 @@
     // 文章数据
     const tableData = reactive({
         current: 1,    // 当前所在页数
-        pageTotal: 5,  // 每页条量
+        pageTotal: 10,  // 每页条量
         totalItems: 0, // 总数据量
         totalPages: 0, // 总页数
         rows: []

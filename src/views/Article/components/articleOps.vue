@@ -57,10 +57,12 @@
     const onCancel = () => {
         emit('closeDrawer') // 关闭抽屉
 
-        // 清除表单数据
-        articleForm.stem = ''
-        articleForm.content = ''
-        editorKey.value++
+        // 如果是新增文章页面，就清除表单数据
+        if(props.opsType === ARTICLE_OPS_TYPE.add) {
+            articleForm.stem = ''
+            articleForm.content = ''
+            editorKey.value++
+        }
     }
 
     onMounted(() => {

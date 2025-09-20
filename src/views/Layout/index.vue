@@ -19,6 +19,7 @@
 <template>
     <div class="common-layout">
         <el-container>
+            <!-- 侧边栏 -->
             <el-aside width="170px">
                 <el-menu
                     router
@@ -38,7 +39,10 @@
                     </el-menu-item>
                 </el-menu>
             </el-aside>
+
+            <!-- 右侧分为头部还有主体 -->
             <el-container>
+                <!-- 头部 -->
                 <el-header>
                     <div class="user">
                         <el-avatar
@@ -54,6 +58,8 @@
                         </el-popconfirm>
                     </el-icon>
                 </el-header>
+
+                <!-- 主体 -->
                 <el-main>
                     <router-view></router-view>
                 </el-main>
