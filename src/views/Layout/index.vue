@@ -49,7 +49,7 @@
                     <el-icon :size="20">
                         <el-popconfirm title="Are you sure to delete this?" @confirm="onQuit" >
                             <template #reference>
-                            <SwitchButton />
+                            <SwitchButton style="cursor: pointer;"/>
                             </template>
                         </el-popconfirm>
                     </el-icon>

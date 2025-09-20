@@ -1,5 +1,5 @@
 <script setup>
-    import { onMounted, reactive, ref } from 'vue'
+    import { computed, onMounted, reactive, ref } from 'vue'
     import { articleApi, delArticleApi } from '@/api/article'
     import { ElMessage, ElMessageBox } from 'element-plus'
     import articleOps from './components/articleOps.vue'
@@ -23,6 +23,10 @@
     }
 
     const currentOps = ref('') // 当前打开的抽屉的文章操作类型
+    const articleCurrentOps = computed(() => {
+        return opsMap[currentOps.value] + '文章'
+    })
+    const articleId = ref('')  // 不同文章对应的id
 
     // 获取文章信息
     const getArticleData = async (currentPage) => {
@@ -60,9 +64,10 @@
     }
 
     // 打开抽屉
-    const openDrawer = (key) => {
-        currentOps.value = opsMap[key] + '文章'
+    const openDrawer = (type, id) => {
+        currentOps.value = type
         drawer.value = true
+        articleId.value = id
     }
 
     onMounted(() => {
@@ -85,7 +90,7 @@
             <template #header>
                 <div class="card-header">
                     <span>共有 {{ tableData.totalItems }} 篇文章</span>
-                    <el-button type="primary" round @click="openDrawer(ARTICLE_OPS_TYPE.add)">
+                    <el-button type="primary" round @click="openDrawer(ARTICLE_OPS_TYPE.add, '')">
                         <el-icon><Plus /></el-icon>
                         <span>新增文章</span>
                     </el-button>
@@ -107,14 +112,14 @@
                             effect="dark"
                             content="预览"
                             placement="bottom">
-                            <el-icon style="cursor: pointer;" @click="openDrawer(ARTICLE_OPS_TYPE.preview)"><View /></el-icon>
+                            <el-icon style="cursor: pointer;" @click="openDrawer(ARTICLE_OPS_TYPE.preview, row.id)"><View /></el-icon>
                         </el-tooltip>
                         <el-tooltip
                             class="box-item"
                             effect="dark"
                             content="编辑"
                             placement="bottom">
-                            <el-icon style="cursor: pointer;" @click="openDrawer(ARTICLE_OPS_TYPE.edit)"><Edit /></el-icon>
+                            <el-icon style="cursor: pointer;" @click="openDrawer(ARTICLE_OPS_TYPE.edit, row.id)"><Edit /></el-icon>
                         </el-tooltip>
                         <el-tooltip
                             class="box-item"
@@ -143,11 +148,12 @@
             <!-- 抽屉功能 -->
             <el-drawer
                 v-model="drawer"
-                :title="currentOps"
+                :title="articleCurrentOps"
                 direction="rtl"
                 size="45%"
+                :key="articleId"
             >
-                <articleOps />
+                <articleOps :opsType="currentOps" :articleId="articleId"/>   
             </el-drawer>
         </el-card>
   </div>

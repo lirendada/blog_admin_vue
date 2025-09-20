@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 获取文章信息
+// 获取文章列表
 export const articleApi = (query) => {
     return request({
         method: 'get',
@@ -13,6 +13,14 @@ export const articleApi = (query) => {
 export const delArticleApi = (id) => {
     return request({
         method: 'delete',
+        url: `/article/${id}`
+    })
+}
+
+// 获取文章详细信息
+export const articleDetailApi = (id) => {
+    return request({
+        method: 'get',
         url: `/article/${id}`
     })
 }
