@@ -24,3 +24,12 @@ export const articleDetailApi = (id) => {
         url: `/article/${id}`
     })
 }
+
+// 新增文章
+export const addArticleApi = (articleForm) => {
+    return request({
+        method: 'post',
+        url: '/article',
+        data: articleForm
+    })
+}

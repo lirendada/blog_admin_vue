@@ -1,7 +1,9 @@
 <script setup>
     import { ARTICLE_OPS_TYPE } from '@/constant/articleConstant'
-    import { articleDetailApi } from '@/api/article'
-    import { onMounted, ref } from 'vue'
+    import { articleDetailApi, addArticleApi } from '@/api/article'
+    import { onMounted, ref, reactive } from 'vue'
+    import { ElMessage } from 'element-plus'
+    const emit = defineEmits()
 
     const props = defineProps({
         opsType: {
@@ -14,22 +16,40 @@
         }
     })
 
-    const articleDetail = ref({})
+    // 新增/编辑文章时候双向绑定的内容
+    const articleForm = reactive({
+        stem: '',
+        content: ''
+    })
 
+    const articleDetail = ref({}) // 文章详情
+    const editorKey = ref(0)      // 这个变量用于刷新富文本编辑器的content
+
+    // 获取预览界面的内容
     const showRequest = async () => {
         if(props.opsType === ARTICLE_OPS_TYPE.preview) {
-            // 预览界面
             const data = await articleDetailApi(props.articleId)
             articleDetail.value = data
-            // console.log(articleDetail.value);
-            
-        } else {
-            if(props.articleId === null || props.articleId === '') {
-                // 新增页面
-            } else {
-                // 编辑页面
-            }
         }
+    }
+
+    // 新增/编辑文章后点击确认的处理函数
+    const onAdd = async () => {
+        if(props.articleId) {
+            // 编辑
+        } else {
+            // 新增
+            await addArticleApi(articleForm)
+        }
+
+        ElMessage.success(props.articleId ? "编辑成功！" : "新增成功！")
+        emit('closeDrawer') // 关闭抽屉
+        emit('updateData') // 更新数据
+
+        // 清除表单数据
+        articleForm.stem = ''
+        articleForm.content = ''
+        editorKey.value++
     }
 
     onMounted(() => {
@@ -42,14 +62,21 @@
     <div class="show-edit-or-add" v-if="opsType === ARTICLE_OPS_TYPE.add || opsType === ARTICLE_OPS_TYPE.edit">
         <el-form label-width="auto">
             <el-form-item label="标题">
-                <el-input placeholder="请输入标题" />
+                <el-input placeholder="请输入标题" v-model="articleForm.stem"/>
             </el-form-item>
 
             <el-form-item label="内容">
-                <QuillEditor theme="snow" toolbar="full" placeholder="请输入内容" />
+                <QuillEditor 
+                    :key="editorKey"
+                    theme="snow" 
+                    toolbar="full" 
+                    placeholder="请输入内容" 
+                    v-model:content="articleForm.content"
+                    contentType="html"
+                />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">确 认</el-button>
+                <el-button type="primary" @click="onAdd">确 认</el-button>
                 <el-button>取 消</el-button>
             </el-form-item>
         </el-form>

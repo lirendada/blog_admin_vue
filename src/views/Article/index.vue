@@ -1,6 +1,6 @@
 <script setup>
     import { computed, onMounted, reactive, ref } from 'vue'
-    import { articleApi, delArticleApi } from '@/api/article'
+    import { articleApi, delArticleApi, addArticleApi } from '@/api/article'
     import { ElMessage, ElMessageBox } from 'element-plus'
     import articleOps from './components/articleOps.vue'
     import { ARTICLE_OPS_TYPE } from '@/constant/articleConstant'
@@ -68,6 +68,11 @@
         currentOps.value = type
         drawer.value = true
         articleId.value = id
+    }
+
+    // 关闭抽屉
+    const closeDrawer = () => {
+        drawer.value = false
     }
 
     onMounted(() => {
@@ -153,7 +158,12 @@
                 size="45%"
                 :key="articleId"
             >
-                <articleOps :opsType="currentOps" :articleId="articleId"/>   
+                <articleOps 
+                    :opsType="currentOps" 
+                    :articleId="articleId"
+                    @closeDrawer="closeDrawer"
+                    @updateData="getArticleData(tableData.current)"
+                />   
             </el-drawer>
         </el-card>
   </div>
