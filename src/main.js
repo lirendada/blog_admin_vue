@@ -3,6 +3,9 @@ import App from './App.vue'
 
 import { createPinia } from 'pinia'
 
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
+
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import { Lock, 
@@ -34,5 +37,7 @@ app.component(Plus.name, Plus)
 app.component(Edit.name, Edit)
 app.component(Delete.name, Delete)
 app.component(View.name, View)
+
+app.component('QuillEditor', QuillEditor)
 
 app.mount('#app')

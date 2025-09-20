@@ -1,7 +1,9 @@
 <script setup>
-    import { onMounted, reactive } from 'vue'
+    import { onMounted, reactive, ref } from 'vue'
     import { articleApi, delArticleApi } from '@/api/article'
     import { ElMessage, ElMessageBox } from 'element-plus'
+    import articleOps from './components/articleOps.vue'
+    import { ARTICLE_OPS_TYPE } from '@/constant/articleConstant'
 
     // 文章数据
     const tableData = reactive({
@@ -11,6 +13,16 @@
         totalPages: 0, // 总页数
         rows: []
     })
+    
+    const drawer = ref(false) // 是否打开抽屉
+
+    const opsMap = {
+        add: '新增',
+        preview: '预览',
+        edit: '编辑'
+    }
+
+    const currentOps = ref('') // 当前打开的抽屉的文章操作类型
 
     // 获取文章信息
     const getArticleData = async (currentPage) => {
@@ -29,6 +41,7 @@
         getArticleData(tableData.current)
     }
 
+    // 删除文章
     const onDel = async (id) => {
         try {
             await ElMessageBox.confirm(
@@ -46,6 +59,12 @@
         } catch(e) {}
     }
 
+    // 打开抽屉
+    const openDrawer = (key) => {
+        currentOps.value = opsMap[key] + '文章'
+        drawer.value = true
+    }
+
     onMounted(() => {
         getArticleData(tableData.current)
     })
@@ -53,6 +72,7 @@
 
 <template>
     <div class="main-box">
+        <!-- 头部顶栏 -->
         <div class="header">
             <el-breadcrumb separator-icon="ArrowRight">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -61,16 +81,18 @@
         </div>
 
         <el-card>
+            <!-- 卡片中的顶部 -->
             <template #header>
                 <div class="card-header">
                     <span>共有 {{ tableData.totalItems }} 篇文章</span>
-                    <el-button type="primary" round>
+                    <el-button type="primary" round @click="openDrawer(ARTICLE_OPS_TYPE.add)">
                         <el-icon><Plus /></el-icon>
                         <span>新增文章</span>
                     </el-button>
                 </div>
             </template>
 
+            <!-- 卡片中的表格部分 -->
             <el-table :data="tableData.rows" border striped style="width: 100%">
                 <el-table-column prop="stem" label="标题" min-width="300" />
                 <el-table-column prop="creator" label="作者" min-width="120" />
@@ -85,14 +107,14 @@
                             effect="dark"
                             content="预览"
                             placement="bottom">
-                            <el-icon style="cursor: pointer;"><View /></el-icon>
+                            <el-icon style="cursor: pointer;" @click="openDrawer(ARTICLE_OPS_TYPE.preview)"><View /></el-icon>
                         </el-tooltip>
                         <el-tooltip
                             class="box-item"
                             effect="dark"
                             content="编辑"
                             placement="bottom">
-                            <el-icon style="cursor: pointer;"><Edit /></el-icon>
+                            <el-icon style="cursor: pointer;" @click="openDrawer(ARTICLE_OPS_TYPE.edit)"><Edit /></el-icon>
                         </el-tooltip>
                         <el-tooltip
                             class="box-item"
@@ -106,6 +128,7 @@
                 </el-table-column>
             </el-table>
                 
+            <!-- 卡片中的分页部分 -->
             <template #footer>
                 <el-pagination 
                     background 
@@ -116,6 +139,16 @@
                     @current-change="onCurrentChange"
                 />
             </template>
+
+            <!-- 抽屉功能 -->
+            <el-drawer
+                v-model="drawer"
+                :title="currentOps"
+                direction="rtl"
+                size="45%"
+            >
+                <articleOps />
+            </el-drawer>
         </el-card>
   </div>
 </template>
